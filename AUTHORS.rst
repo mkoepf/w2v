@@ -2,4 +2,4 @@
 Contributors
 ============
 
-* Michael Köpf <michael.koepf@cognotekt.com>
+* Michael Köpf <mhkoepf@gmail.com>

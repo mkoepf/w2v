@@ -18,31 +18,17 @@ Note: This skeleton file can be safely removed if not needed!
 import argparse
 import sys
 import logging
+from typing import List, Tuple
 
-from w2v import __version__
+from books.alice_in_wonderland import alice_in_wonderland
+
+from w2v import __version__, vectorize, prepare_samples, network
 
 __author__ = "Michael Köpf"
 __copyright__ = "Michael Köpf"
 __license__ = "mit"
 
 _logger = logging.getLogger(__name__)
-
-
-def fib(n):
-    """Fibonacci example function
-
-    Args:
-      n (int): integer
-
-    Returns:
-      int: n-th Fibonacci number
-    """
-    assert n > 0
-    a, b = 1, 1
-    for i in range(n-1):
-        a, b = b, a+b
-    return a
-
 
 def parse_args(args):
     """Parse command line parameters
@@ -54,16 +40,16 @@ def parse_args(args):
       :obj:`argparse.Namespace`: command line parameters namespace
     """
     parser = argparse.ArgumentParser(
-        description="Just a Fibonacci demonstration")
+        description="Simple implementation of word2vec.")
     parser.add_argument(
         "--version",
         action="version",
         version="w2v {ver}".format(ver=__version__))
     parser.add_argument(
-        dest="n",
-        help="n-th Fibonacci number",
+        dest="dim_embed",
+        help="dimension of the embedding space",
         type=int,
-        metavar="INT")
+        metavar="DIM_EMBED")
     parser.add_argument(
         "-v",
         "--verbose",
@@ -92,6 +78,24 @@ def setup_logging(loglevel):
                         format=logformat, datefmt="%Y-%m-%d %H:%M:%S")
 
 
+def word2vec(dim_embed: int):
+    # Get vocabulary
+    vocabulary: List[str] = prepare_samples.vocabulary_from_wordlists(alice_in_wonderland)
+    _logger.debug("Vocabulary size: %d", len(vocabulary))
+
+    # Get word pairs
+    word_pairs: List[Tuple[str, str]] = prepare_samples.samples_from_wordlists(alice_in_wonderland, 1)
+    _logger.debug("Number of word pairs: %d", len(word_pairs))
+
+    # Get input and output vectors as column matrices
+    (X, Y) = vectorize.training_matrix(word_pairs, vocabulary)
+    _logger.debug("dim(X)=%dx%d dim(Y)=%dx%d", X.shape[0], X.shape[1], Y.shape[0], Y.shape[1])
+
+    model = network.net(len(vocabulary), dim_embed, len(vocabulary))
+
+    network.train_model(model, X, Y)
+
+
 def main(args):
     """Main entry point allowing external calls
 
@@ -100,9 +104,11 @@ def main(args):
     """
     args = parse_args(args)
     setup_logging(args.loglevel)
-    _logger.debug("Starting crazy calculations...")
-    print("The {}-th Fibonacci number is {}".format(args.n, fib(args.n)))
-    _logger.info("Script ends here")
+    _logger.info("Starting ...")
+
+    word2vec(args.dim_embed)
+
+    _logger.info("Done!")
 
 
 def run():
