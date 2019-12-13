@@ -70,6 +70,5 @@ def vocabulary_from_wordlists(wordlists: List[List[str]], max_vocabulary_size: i
     return [word for (word, freq) in vocabulary_most_common]
 
 
-def filter_samples_by_vocabulary(samples: List[Tuple[str,str]], vocabulary: List[str]) -> List[Tuple[str, str]]:
+def filter_samples_by_vocabulary(samples: List[Tuple[str, str]], vocabulary: List[str]) -> List[Tuple[str, str]]:
     return [(word1, word2) for (word1, word2) in samples if word1 in vocabulary and word2 in vocabulary]
-

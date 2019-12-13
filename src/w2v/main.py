@@ -51,10 +51,23 @@ def parse_args(args):
         action="version",
         version="w2v {ver}".format(ver=__version__))
     parser.add_argument(
+        "--dim-embedding",
         dest="dim_embed",
         help="dimension of the embedding space",
         type=int,
         metavar="DIM_EMBED")
+    parser.add_argument(
+        "--dim-input",
+        dest="max_vocabulary_size",
+        help="DIM_INPUT",
+        type=int,
+        metavar="DIM_INPUT")
+    parser.add_argument(
+        "--window-width",
+        dest="window_width",
+        help="text window within which words are considered part of the same skip-gram",
+        type=int,
+        metavar="WIN_WIDTH")
     parser.add_argument(
         "-v",
         "--verbose",
@@ -83,17 +96,14 @@ def setup_logging(loglevel):
                         format=logformat, datefmt="%Y-%m-%d %H:%M:%S")
 
 
-def word2vec(dim_embed: int):
-    window_width: int = 1
-    max_vocabulary_size: int = 500
+def word2vec(dim_embed: int = 30, max_vocabulary_size: int = 100, window_width: int = 2):
 
     # Get vocabulary
     all_files: List[str] = gutenberg.fileids()
+    wordlists: List[List[str]] = gutenberg.sents(all_files)
 
-    wordlists: List[List[str]] = gutenberg.sents('austen-sense.txt')
-    # wordlists: List[List[str]] = gutenberg.sents(all_files)
     _logger.info("Number of sentences: {}".format(len(wordlists)))
-    _logger.info("Number of words: {}".format(sum([len(l) for l in wordlists])))
+    _logger.info("Number of words: {}".format(sum([len(cur_list) for cur_list in wordlists])))
 
     word_pairs: List[Tuple[str, str]] = prepare_samples.samples_from_wordlists(wordlists, window_width)
     _logger.info("Number of word pairs: {}".format(len(word_pairs)))
@@ -123,7 +133,7 @@ def main(args):
     setup_logging(args.loglevel)
     _logger.info("Starting ...")
 
-    word2vec(args.dim_embed)
+    word2vec(args.dim_embed, args.max_vocabulary_size, args.window_width)
 
     _logger.info("Done!")
 
