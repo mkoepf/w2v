@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.com/mkoepf/w2v.svg?branch=master)](https://travis-ci.com/mkoepf/w2v)
+|Build Status|
+
+.. |Build Status| image:: https://travis-ci.com/mkoepf/w2v.svg?branch=master
+   :target: https://travis-ci.com/mkoepf/w2v
 
 ===
 w2v
