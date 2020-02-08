@@ -43,18 +43,21 @@ def parse_args(args):
         dest="dim_embed",
         help="dimension of the embedding space",
         type=int,
+        default=30,
         metavar="DIM_EMBED")
     parser.add_argument(
         "--dim-input",
         dest="max_vocabulary_size",
         help="DIM_INPUT",
         type=int,
+        default=100,
         metavar="DIM_INPUT")
     parser.add_argument(
         "--window-width",
         dest="window_width",
         help="text window within which words are considered part of the same skip-gram",
         type=int,
+        default=2,
         metavar="WIN_WIDTH")
     parser.add_argument(
         "-v",
@@ -84,7 +87,9 @@ def setup_logging(loglevel):
                         format=logformat, datefmt="%Y-%m-%d %H:%M:%S")
 
 
-def word2vec(dim_embed: int = 30, max_vocabulary_size: int = 100, window_width: int = 2):
+def word2vec(dim_embed: int, max_vocabulary_size: int,  window_width: int):
+    _logger.info("Max size of vocabulary: {}".format(max_vocabulary_size))
+    _logger.info("Window width: {}".format(window_width))
 
     # Get vocabulary
     all_files: List[str] = gutenberg.fileids()
