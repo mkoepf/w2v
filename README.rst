@@ -1,7 +1,8 @@
+[![Build Status](https://travis-ci.com/mkoepf/shade.svg?branch=master)](https://travis-ci.com/mkoepf/w2v)
+
 ===
 w2v
 ===
-
 
 Add a short description here!
 
