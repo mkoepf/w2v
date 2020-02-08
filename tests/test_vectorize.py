@@ -28,11 +28,11 @@ def test_training_matrix():
 
     assert np.allclose(
         x,
-        np.array([[1, 0, 0, 0],
-                 [0, 0, 0, 1]])
+        np.array([[1, 0, 0, 0],   # 'a'
+                 [0, 0, 0, 1]])   # 'd'
     )
     assert np.allclose(
         y,
-        np.array([[0, 1, 0, 0],
-                  [0, 0, 1, 0]])
+        np.array([[0, 1, 0, 0],   # 'b'
+                  [0, 0, 1, 0]])  # 'c'
     )
