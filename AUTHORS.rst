@@ -2,4 +2,4 @@
 Contributors
 ============
 
-* Michael Köpf <mhkoepf@gmail.com>
+* Michael Köpf <mkoepf@users.noreply.github.com>
