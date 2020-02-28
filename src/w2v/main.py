@@ -119,7 +119,7 @@ def word2vec(dim_embed: int, max_vocabulary_size: int,  window_width: int):
 
     model = network.net(len(vocabulary), dim_embed, len(vocabulary))
 
-    network.train_model(model, X, Y)
+    network.train_model(model, X, Y, 1000)
 
 
 def main(args):
