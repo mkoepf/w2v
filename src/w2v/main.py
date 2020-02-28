@@ -106,6 +106,10 @@ def word2vec(dim_embed: int, max_vocabulary_size: int,  window_width: int):
     vocabulary: List[str] = prepare_samples.vocabulary_from_wordlists(wordlists, max_vocabulary_size)
     _logger.info("Vocabulary size: {}".format(len(vocabulary)))
 
+    _logger.debug("Vocabulary")
+    _logger.debug("==========")
+    _logger.debug('\n'.join(vocabulary))
+
     word_pairs_filtered: List[Tuple[str, str]] = prepare_samples.filter_samples_by_vocabulary(word_pairs, vocabulary)
     _logger.info("Number of word pairs with both words in vocabulary: {}".format(len(word_pairs_filtered)))
 
