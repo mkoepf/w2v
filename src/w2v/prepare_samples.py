@@ -1,22 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-This is a skeleton file that can serve as a starting point for a Python
-console script. To run this script uncomment the following lines in the
-[options.entry_points] section in setup.cfg:
 
-    console_scripts =
-         fibonacci = w2v.skeleton:run
-
-Then run `python setup.py install` which will install the command `fibonacci`
-inside your current environment.
-Besides console scripts, the header (i.e. until _logger...) of this file can
-also be used as template for Python modules.
-
-Note: This skeleton file can be safely removed if not needed!
-"""
-
-from typing import Tuple, List
-from nltk import FreqDist
+from typing import Tuple, List, Set, Any, Dict
+from nltk import FreqDist, download
+from nltk.corpus import stopwords
+download('stopwords')
+from string import punctuation
 
 
 def take_window(wordlist: List[str], pos: int, width: int) -> List[str]:
@@ -26,13 +14,27 @@ def take_window(wordlist: List[str], pos: int, width: int) -> List[str]:
 
 
 def wordlist_from_sentence(sentence: str) -> List[str]:
-    # Here will be preprocessing
-
-    return sentence.split(" ")
+    return preprocess_wordlist(sentence.split(" "))
 
 
 def wordlists_from_sentences(sentences: List[str]) -> List[List[str]]:
     return [wordlist_from_sentence(sentence) for sentence in sentences]
+
+
+def preprocess_wordlist(wordlist: List[str]) -> List[str]:
+    # Remove punctuation
+    translate_table: Dict[int, None] = dict((ord(char), None) for char in punctuation)
+    wl: List[str] = [w.translate(translate_table) for w in wordlist]
+
+    # Remove stopwords
+    stopwords_english = set(stopwords.words('english'))
+    wl_clean = [w for w in wl if w not in stopwords_english]
+
+    return wl_clean
+
+
+def preprocess_wordlists(wordlists: List[List[str]]) -> List[List[str]]:
+    return [preprocess_wordlist(wl) for wl in wordlists]
 
 
 def samples_from_wordlist(wordlist: List[str], window_width: int) -> List[Tuple[str, str]]:

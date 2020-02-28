@@ -93,7 +93,9 @@ def word2vec(dim_embed: int, max_vocabulary_size: int,  window_width: int):
 
     # Get vocabulary
     all_files: List[str] = gutenberg.fileids()
-    wordlists: List[List[str]] = gutenberg.sents(all_files)
+    wordlists_unprocessed: List[List[str]] = gutenberg.sents(all_files)
+
+    wordlists: List[List[str]] = prepare_samples.preprocess_wordlists(wordlists_unprocessed)
 
     _logger.info("Number of sentences: {}".format(len(wordlists)))
     _logger.info("Number of words: {}".format(sum([len(cur_list) for cur_list in wordlists])))

@@ -26,20 +26,20 @@ def test_take_window():
 
 def test_wordlist_from_sentence():
     assert wordlist_from_sentence('A sentence like no other.') == [
-        'A', 'sentence', 'like', 'no', 'other.'
+        'A', 'sentence', 'like', 'no', 'other'
     ]
     assert wordlist_from_sentence("A nice little sentence, isn't it?") == [
-        'A', 'nice', 'little', 'sentence,', "isn't", 'it?'
+        'A', 'nice', 'little', 'sentence', "isnt", 'it'
     ]
 
 
 def test_wordlists_from_sentences():
     assert wordlists_from_sentences([
         'A sentence like no other.',
-        "A nice little sentence, isn't it?"
+        "A nice little sentence, isnt it?"
     ]) == [
-               ['A', 'sentence', 'like', 'no', 'other.'],
-               ['A', 'nice', 'little', 'sentence,', "isn't", 'it?']
+               ['A', 'sentence', 'like', 'no', 'other'],
+               ['A', 'nice', 'little', 'sentence', "isnt", 'it']
            ]
 
 
