@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from typing import Tuple, List, Set, Any, Dict
+from typing import Tuple, List, Dict
 from nltk import FreqDist, download
 from nltk.corpus import stopwords
-download('stopwords')
 from string import punctuation
+
+download('stopwords')
 
 
 def take_window(wordlist: List[str], pos: int, width: int) -> List[str]:
@@ -38,7 +39,6 @@ def preprocess_wordlists(wordlists: List[List[str]]) -> List[List[str]]:
 
 
 def samples_from_wordlist(wordlist: List[str], window_width: int) -> List[Tuple[str, str]]:
-
     windows: List[Tuple[str, List[str]]] = \
         [(w, take_window(wordlist, i, window_width)) for (i, w) in enumerate(wordlist)]
 
@@ -47,19 +47,6 @@ def samples_from_wordlist(wordlist: List[str], window_width: int) -> List[Tuple[
 
 def samples_from_wordlists(wordlists: List[List[str]], width: int) -> List[Tuple[str, str]]:
     return [sample for wl in wordlists for sample in samples_from_wordlist(wl, width)]
-
-
-def samples_from_sentence(sentence: str, window_width: int) -> List[Tuple[str, str]]:
-    words: List[str] = wordlist_from_sentence(sentence)
-    return samples_from_wordlist(words, window_width)
-
-
-def samples_from_sentences(sentences: List[str], window_width: int) -> List[Tuple[str, str]]:
-    samples_list: List[List[Tuple[str, str]]] = \
-        [samples_from_sentence(sentence, window_width) for sentence in sentences]
-
-    # flatten
-    return [item for sublist in samples_list for item in sublist]
 
 
 def vocabulary_from_wordlists(wordlists: List[List[str]], max_vocabulary_size: int) -> List[str]:
