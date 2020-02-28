@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 import torch.nn as nn
-from torch import Tensor
+from torch import Tensor, optim
 
 
 def net(input_size: int, hidden_size: int, output_size: int):
@@ -18,20 +18,22 @@ def compute_loss(y_pred, y):
     return torch.nn.MSELoss(reduction='sum')(y_pred, y)
 
 
-def train_model(model, x: np.array, y: np.array):
-    learning_rate = 1e-4
+def train_model(model, x: np.array, y: np.array, epochs: int):
+    learning_rate = 1e-5
 
-    for t in range(100):
-        y_pred = model(torch.from_numpy(x).float())
+    optimizer = optim.SGD(model.parameters(), lr=learning_rate)
 
-        loss: Tensor = compute_loss(y_pred.float(), torch.from_numpy(y).float())
+    x_tensor: Tensor = torch.from_numpy(x).float()
+    y_tensor: Tensor = torch.from_numpy(y).float()
+
+    for t in range(epochs):
+        y_pred = model(x_tensor)
+
+        loss: Tensor = compute_loss(y_pred.float(), y_tensor)
         if t % 10 == 9:
             print(t, loss.item())
 
-        model.zero_grad()
-
         loss.backward()
 
-        with torch.no_grad():
-            for param in model.parameters():
-                param -= learning_rate * param.grad
+        optimizer.step()
+        optimizer.zero_grad()

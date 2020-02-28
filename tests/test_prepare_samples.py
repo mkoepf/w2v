@@ -1,5 +1,5 @@
-from w2v.prepare_samples import samples_from_sentence, take_window, vocabulary_from_wordlists, samples_from_wordlists, \
-    samples_from_sentences, wordlist_from_sentence, wordlists_from_sentences, filter_samples_by_vocabulary
+from w2v.prepare_samples import take_window, vocabulary_from_wordlists, samples_from_wordlists, \
+    filter_samples_by_vocabulary
 
 from typing import List, Tuple
 
@@ -22,69 +22,6 @@ def test_take_window():
     assert take_window(['I', 'do', 'not', 'solemnly', 'swear'], 1, 2) == ['I', 'not', 'solemnly']
     assert take_window(['I', 'do', 'not', 'solemnly', 'swear'], 0, 2) == ['do', 'not']
     assert take_window(['I', 'do', 'not', 'solemnly', 'swear'], 4, 2) == ['not', 'solemnly']
-
-
-def test_wordlist_from_sentence():
-    assert wordlist_from_sentence('A sentence like no other.') == [
-        'A', 'sentence', 'like', 'no', 'other.'
-    ]
-    assert wordlist_from_sentence("A nice little sentence, isn't it?") == [
-        'A', 'nice', 'little', 'sentence,', "isn't", 'it?'
-    ]
-
-
-def test_wordlists_from_sentences():
-    assert wordlists_from_sentences([
-        'A sentence like no other.',
-        "A nice little sentence, isn't it?"
-    ]) == [
-               ['A', 'sentence', 'like', 'no', 'other.'],
-               ['A', 'nice', 'little', 'sentence,', "isn't", 'it?']
-           ]
-
-
-def test_samples_from_sentence():
-    assert samples_from_sentence('I do', 1) == [
-        ('I', 'do'),
-        ('do', 'I')
-    ]
-    assert samples_from_sentence('I do not swear', 1) == [
-        ('I', 'do'),
-        ('do', 'I'),
-        ('do', 'not'),
-        ('not', 'do'),
-        ('not', 'swear'),
-        ('swear', 'not')
-    ]
-    assert samples_from_sentence('I do not swear', 2) == [
-        ('I', 'do'),
-        ('I', 'not'),
-        ('do', 'I'),
-        ('do', 'not'),
-        ('do', 'swear'),
-        ('not', 'I'),
-        ('not', 'do'),
-        ('not', 'swear'),
-        ('swear', 'do'),
-        ('swear', 'not')
-    ]
-
-
-def test_samples_from_sentences():
-    assert samples_from_sentences(
-        [
-            'I do',
-            'I do not swear'
-        ], 1) == [
-               ('I', 'do'),
-               ('do', 'I'),
-               ('I', 'do'),
-               ('do', 'I'),
-               ('do', 'not'),
-               ('not', 'do'),
-               ('not', 'swear'),
-               ('swear', 'not')
-           ]
 
 
 def test_samples_from_wordlists():

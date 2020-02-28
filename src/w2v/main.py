@@ -93,7 +93,9 @@ def word2vec(dim_embed: int, max_vocabulary_size: int,  window_width: int):
 
     # Get vocabulary
     all_files: List[str] = gutenberg.fileids()
-    wordlists: List[List[str]] = gutenberg.sents(all_files)
+    wordlists_unprocessed: List[List[str]] = gutenberg.sents(all_files)
+
+    wordlists: List[List[str]] = prepare_samples.preprocess_wordlists(wordlists_unprocessed)
 
     _logger.info("Number of sentences: {}".format(len(wordlists)))
     _logger.info("Number of words: {}".format(sum([len(cur_list) for cur_list in wordlists])))
@@ -104,6 +106,10 @@ def word2vec(dim_embed: int, max_vocabulary_size: int,  window_width: int):
     vocabulary: List[str] = prepare_samples.vocabulary_from_wordlists(wordlists, max_vocabulary_size)
     _logger.info("Vocabulary size: {}".format(len(vocabulary)))
 
+    _logger.debug("Vocabulary")
+    _logger.debug("==========")
+    _logger.debug('\n'.join(vocabulary))
+
     word_pairs_filtered: List[Tuple[str, str]] = prepare_samples.filter_samples_by_vocabulary(word_pairs, vocabulary)
     _logger.info("Number of word pairs with both words in vocabulary: {}".format(len(word_pairs_filtered)))
 
@@ -113,7 +119,7 @@ def word2vec(dim_embed: int, max_vocabulary_size: int,  window_width: int):
 
     model = network.net(len(vocabulary), dim_embed, len(vocabulary))
 
-    network.train_model(model, X, Y)
+    network.train_model(model, X, Y, 1000)
 
 
 def main(args):
